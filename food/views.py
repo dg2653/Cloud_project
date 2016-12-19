@@ -6,15 +6,14 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse
 from .mongoquery import MongoDbHandler
 import json
-db_handler = MongoDbHandler('localhost','yelp_dataset')
+import base64
+import boto3
+db_handler = MongoDbHandler('localhost', 'yelp_dataset')
+# s3.create_bucket(Bucket="app-bucket-dg2653",CreateBucketConfiguration={"LocationConstraint":"us-west-2"})
 
-
-
+bucket_name = "app-bucket-dg2653"
 def index(request):
-    if request.method == "POST":
-        print(request.POST)
-        return HttpResponse()
-    context = {'title': 'Home', 'background': 'images/food9.jpg', "full_name": request.user.first_name + " "+request.user.last_name}
+    context = {'title': 'Home'}
     return render(request, 'index.html', context)
 
 
@@ -41,15 +40,6 @@ def restaurants(request):
 
 
 @login_required
-def people(request):
-    return render(request, 'index.html', {'title': 'People'})
-
-
-@login_required
-def event(request):
-    return render(request, 'event.html', {'title': 'Events'})
-
-@login_required
 def recipes(request):
     if request.method == "GET":
         context = {'title': 'Recipes'}
@@ -59,11 +49,41 @@ def recipes(request):
         cooking_time = request.POST['cooking_time']
         ingredients = request.POST['ingredients']
         directions = request.POST['directions']
-        #file = request.POST.get('dish_photo')
+        file = request.POST.get('dish_photo')
         #dish_photo = request.POST['dish_photo']
-
         context = {'title': 'Recipes', 'message': 'Recipe Saved !'}
+        obj = FoodRecipe(dish_title=title, cooking_time=cooking_time, ingredients=ingredients, directions=directions, dish_photo=file)
+        obj.save()
         return render(request, 'recipes.html', context)
+
+
+def upload_user_image(request):
+    if request.method == "POST":
+        image_base64 = request.POST.get("image_base64").split("base64,")[1]
+        s3 = boto3.resource('s3')
+        s3.Bucket(bucket_name).put_object(Key=request.user.username+"/profile_pic.png", Body=base64.b64decode(image_base64))
+        context = {'title': 'Profile'}
+        return render(request, 'profile.html', context)
+    return redirect("/")
+
+
+
+@login_required
+def people(request):
+    users = User.objects.all()
+    return render(request, 'people.html', {'title': 'People', 'users':users})
+
+@login_required
+def view_profile(request):
+    if request.user.username==request.GET.get('user_id'):
+        return redirect("/profile/")
+    context = {"title": "People"}
+    return render(request, 'other_user_profiles.html', context)
+
+
+@login_required
+def event(request):
+    return render(request, 'event.html', {'title': 'Events'})
 
 
 def login_app(request):
@@ -121,44 +141,21 @@ def logout_app(request):
 
 @login_required
 def profile_page(request):
+    from io import BytesIO
     if request.method=="GET":
-        username = request.GET.get("username")
-        if request.user.username == username:
-            return redirect("/")
-        user_obj = User.objects.filter(username=username)
-        if len(user_obj)==0:
-            return
-        return HttpResponse()
-
-
-def upload_user_image(request):
-    if request.method=="POST":
-        image = request.POST.get("image_base64")
-        if image!="":
-            image = image.split("base64,")[1]
-            obj = UserProfile.objects.filter(username=request.user.username)
-            print("OBJECT: "+str(obj))
-            if len(obj)==0:
-                obj = UserProfile(username = request.user.username, profile_pic=image)
-                obj.save()
-            else:
-                obj[0].update(profile_pic=image)
-        return HttpResponse()
-
-
-def get_user_image(request):
-    if request.method=="POST":
-        profile_pic = UserProfile.objects.filter(username=request.user.username).first()
-        if not profile_pic:
-            profile_pic = ''
+        if request.user.username:
+            s3 = boto3.resource('s3')
+            bucket = s3.Bucket(bucket_name)
+            file_content = BytesIO()
+            bucket.download_fileobj(request.user.username+"/profile_pic.png", file_content)
+            context = {'title': 'Profile', "full_name": request.user.first_name + " " + request.user.last_name, "profile_pic":base64.encodestring(file_content.getvalue())}
+            return render(request, 'profile.html', context)
         else:
-            profile_pic = profile_pic.profile_pic
-            # profile_pic = ''
-        return HttpResponse(status=200, content_type="application/json", content=json.dumps({"result":profile_pic}))
+            return render("/")
 
 
 def restaurant_info(request):
     restaurant_id = request.GET.get('restaurant_id')
     data, reviews = db_handler.get_restaurant_info(restaurant_id)
-    context = {"title": "Restaurants", "data": data[0], "days":["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], "reviews":reviews}
+    context = {"title": "Restaurants", "data": data[0], "days": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], "reviews":reviews}
     return render(request, 'restaurant_info.html', context)

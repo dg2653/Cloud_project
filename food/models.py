@@ -120,10 +120,23 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class UserProfile(models.Model):
-    username = models.CharField(primary_key=True, max_length=150)
-    profile_pic = models.TextField(blank=True, null=True)
+class FoodRecipe(models.Model):
+    dish_title = models.CharField(max_length=50)
+    cooking_time = models.CharField(max_length=20)
+    ingredients = models.CharField(max_length=500)
+    directions = models.CharField(max_length=1000)
+    dish_photo = models.FileField(max_length=100)
+    username = models.CharField(max_length=150, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'user_profile'
+        db_table = 'food_recipe'
+
+
+class Friends(models.Model):
+    user_id1 = models.CharField(max_length=150, blank=True, null=True)
+    user_id2 = models.CharField(max_length=150, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'friends'

@@ -36,6 +36,11 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
 
+                {% if title == "Profile" %}
+                    <li class="active"><a href="/profile/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;Profile</a></li>
+                {% else %}
+                    <li class=""><a href="/profile/"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;Profile</a></li>
+                {% endif %}
                 {% if title == "Restaurants" %}
                     <li class="active"><a href="/restaurants/"><span class="glyphicon glyphicon-cutlery" aria-hidden="true"></span>&nbsp;Restaurants</a></li>
                 {% else %}

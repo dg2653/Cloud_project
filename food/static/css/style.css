@@ -39,7 +39,7 @@ h3{
 
 /* Profile sidebar */
 .profile-sidebar {
-    background: #fff;
+    background-color: transparent;
     margin-left: 20px;
     margin-top: 20px;
 }
