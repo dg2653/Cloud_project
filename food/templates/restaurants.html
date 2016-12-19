@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    {% load custom_tags %}
+    <script src="http://maps.google.com/maps/api/js?key=AIzaSyDQQ8a2--acM4YfkScjmgBV8M9ObR2_P9M&" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 4,
+                center: new google.maps.LatLng(39.0119, -98.4842),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            {% if data %}
+                {% for d in data %}
+                    {% if d.coordinates.lat %}
+                        var marker{{ forloop.counter0 }} = new google.maps.Marker({
+                            position: {"lat": {{d.coordinates.lat}}, "lng":{{d.coordinates.lng}}},
+                            title: "{{ d.name }}",
+                            map: map
+                        });
+                        marker{{ forloop.counter0 }}.addListener('click', function () {
+
+                            window.location = "/restaurant_info/?restaurant_id={{ d|get:'_id' }}";
+                        });
+
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            {#            $.ajax({#}
+            {#                url: "/get_all_restaurant_locations/",#}
+            {#                type: "post",#}
+            {#                data:{#}
+            {#                    csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val(),#}
+            {#                },#}
+            {#                success: function(response){#}
+            {#                    var results = response.results;#}
+            {#                    for (i = 0; i < results.length; i++) {#}
+            {#                        marker = new google.maps.Marker({#}
+            {#                            position: {"lat": parseDouble(results[i].coordinates.lat), "lng": parseDouble(results[i].coordinates.lng)},#}
+            {#                            title: results[i].name,#}
+            {#                            map: map#}
+            {#                        });#}
+            {#                    }#}
+            {##}
+            {#                },#}
+            {#                error: function(response){#}
+            {#                    console.log(JSON.stringify(response));#}
+            {#                }#}
+            {#            });#}
+        });
+    </script>
+
+{% endblock %}
+
+{% block incontent %}
+    <div align="center">
+        <h1> Search Restaurants </h1>
+    </div>
+    <form method="POST" action="/restaurants/">
+        {% csrf_token %}
+        <div align="center">
+            <div style="height: 400px; width: 1024px;" id="map">
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col col-md-3">
+                <input id="restaurants" name="restaurants" class="form-control" placeholder="Restaurants"/>
+            </div>
+            <div class="col col-md-3">
+                <select id="city" name="city" class="form-control selectpicker" >
+                    {% for city in cities %}
+                        <option value="{{ city }}">{{ city }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col col-md-3">
+                <select class="form-control selectpicker" id="categories" name="categories" multiple title="Select Categories">
+                    <option value="Restaurants"> Restaurants</option>
+                    <option value="Bars"> Bars</option>
+                    <option value="Food"> Food</option>
+                    <option value="Nightlife"> Nightlife</option>
+                    <option value="Delivery"> Delivery</option>
+                    <option value="Cafes"> Cafes</option>
+                </select>
+            </div>
+            <div class="col col-md-3">
+                <button class="btn btn-success"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;Search</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}

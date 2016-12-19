@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div>0
+        <h2 style="color: whitesmoke">Pick a Place</h2>
+    </div><br/>
+    <form method="POST" action="/restaurants/">
+        {% csrf_token %}
+        <div class="row">
+             <div class="col col-md-3">
+                <input id="restaurants" name="restaurants" class="form-control" placeholder="Restaurants"/>
+            </div>
+            <div class="col col-md-3">
+                <input id="city" name="city" class="form-control" placeholder="City"/>
+            </div>
+            <div class="col col-md-3">
+                <select class="form-control selectpicker" id="categories" name="categories" multiple title="Select Categories">
+                    <option value="chinese"> Chinese </option>
+                    <option value="japanese"> Japanese </option>
+                </select>
+            </div>
+            <div class="col col-md-3">
+                <button class="btn btn-success"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;Search </button>
+            </div>
+        </div>
+    </form>
+    <h2 style="color: whitesmoke">Invite a Friend</h2>
+    <form class="navbar-form navbar-left" role="search" method="get" action="#">
+        <div class="form-group">
+            <input type="text" placeholder="Friends" class="form-control" name="q" value="{{ request.GET.q }}">
+        </div>
+    </form>
+    <button type="submit" class="btn btn-success">Submit</button>
+{% endblock %}

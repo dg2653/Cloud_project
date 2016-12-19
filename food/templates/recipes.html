@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Add a new Recipe</h1>
+    <form method="POST" action="/recipes/" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col col-md-4">
+                <label class="white-label">Title</label>
+                <input name="title" id="title" class="form-control"/>
+            </div>
+            <div class="col col-md-4">
+                <label class="white-label">Cooking Time</label>
+                <input name="cooking_time" id="cooking_time" class="form-control"/>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col col-md-4">
+                <label class="white-label"> Ingredients </label>
+                <textarea class="form-control" id="ingredients" name="ingredients" rows="6"></textarea>
+            </div>
+            <div class="col col-md-4">
+                <label class="white-label"> Directions </label>
+                <textarea class="form-control" id="directions" name="directions" rows="6"></textarea>
+            </div>
+            <div class="col col-md-10">
+                <input type="file" name="image"/>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col col-md-1">
+                <button class="btn btn-primary"> Submit </button>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col col-md-1">
+                {{ message }}
+            </div>
+        </div>
+
+    </form>
+{% endblock %}

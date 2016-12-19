@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script>
+        $(document).ready(function () {
+            $("#register_modal").modal({
+                backdrop: 'static',
+                keyboard: true
+            });
+        });
+        function validateForm() {
+            var error_list = [];
+            if ($("#email").val() == '') {
+                error_list.push("Please enter an email!");
+            }
+            if ($("#password").val() == '') {
+                error_list.push("Please enter a password!");
+            }
+            if ($("#re_password").val() == '') {
+                error_list.push("Please retype your password!");
+            }
+            if($("#password").val()!=$("#re_password").val()){
+                error_list.push("The passwords don't match!!");
+            }
+            if (error_list.length > 0) {
+                var message = "<ul>";
+                for (var i = 0; i < error_list.length; i++) {
+                    message += "<li>" + error_list[i] + "</li>";
+                }
+                message += "</ul>";
+                BootstrapDialog.show({
+                    type: BootstrapDialog.TYPE_DANGER,
+                    title: 'Please review following field(s)!',
+                    message: message,
+                    closable: true,
+                    closeByBackdrop: false,
+                    closeByKeyboard: false,
+                    buttons: [{
+                        label: 'Close',
+                        action: function (dialogRef) {
+                            dialogRef.close();
+                        }
+                    }]
+                });
+                return false;
+            }
+            return true;
+        }
+    </script>
+    <style>
+        .modal {
+            text-align: center;
+        }
+        @media screen and (min-width: 768px) {
+            .modal:before {
+                display: inline-block;
+                vertical-align: middle;
+                content: " ";
+                height: 100%;
+            }
+        }
+        .modal-dialog {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content %}
+    <!-- Modal -->
+    <form action="/accounts/register/" method="POST">
+        {% csrf_token %}
+        <div class="modal fade" id="register_modal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Register</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col col-md-4 col-md-offset-1">
+                                <label> First Name: </label>
+                            </div>
+                            <div class="col col-md-6">
+                                <input class="form-control" id="first_name" name="first_name" value="{{ first_name }}"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col col-md-4 col-md-offset-1">
+                                <label> Last Name: </label>
+                            </div>
+                            <div class="col col-md-6">
+                                <input class="form-control" id="last_name" name="last_name" value="{{ last_name }}"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col col-md-4 col-md-offset-1">
+                                <label> Email*: </label>
+                            </div>
+                            <div class="col col-md-6">
+                                <input class="form-control" id="email" name="email" value="{{ email }}"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col col-md-4 col-md-offset-1">
+                                <label> Password*: </label>
+                            </div>
+                            <div class="col col-md-6">
+                                <input class="form-control" id="password" name="password" type="password"/>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col col-md-4 col-md-offset-1">
+                                <label> Retype Password*: </label>
+                            </div>
+                            <div class="col col-md-6">
+                                <input class="form-control" id="re_password" name="re_password" type="password"/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col col-md-6 col-md-offset-1">
+                            {% if error_message %}
+                                <label style="color: red;">{{ error_message }}</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-md-3 col-md-offset-1">
+                            &nbsp;
+                            <button type="submit" class="btn btn-success" onclick="return validateForm();">Register</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div align="center" style="padding-bottom: 15px">
+                        <label> Already a Member. Please <a href="/accounts/login/">Login</a></label>
+                        <br/>
+                        <label> <a href="/">Home</a></label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+{% endblock %}

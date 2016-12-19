@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+    <script>
+        $(document).ready(function () {
+            $("#login_modal").modal({
+                backdrop: 'static',
+                keyboard: true
+            });
+            $('.modal-backdrop').appendTo('#modalDiv');
+            $('body').removeClass();
+        });
+        function validateForm() {
+            var error_list = [];
+            if ($("#username").val() == '') {
+                error_list.push("Please enter a username!");
+            }
+            if ($("#password").val() == '') {
+                error_list.push("Please enter a password!");
+            }
+            if (error_list.length > 0) {
+                var message = "<ul>";
+                for (var i = 0; i < error_list.length; i++) {
+                    message += "<li>" + error_list[i] + "</li>";
+                }
+                message += "</ul>";
+                BootstrapDialog.show({
+                    type: BootstrapDialog.TYPE_DANGER,
+                    title: 'Please review following field(s)!',
+                    message: message,
+                    closable: true,
+                    closeByBackdrop: false,
+                    closeByKeyboard: false,
+                    buttons: [{
+                        label: 'Close',
+                        action: function (dialogRef) {
+                            dialogRef.close();
+                        }
+                    }]
+                });
+                return false;
+            }
+            return true;
+        }
+    </script>
+    <style>
+        .modal {
+            text-align: center;
+        }
+
+        #modalDiv {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .modal, .modal-backdrop {
+            position: absolute !important;
+        }
+
+        @media screen and (min-width: 768px) {
+            .modal:before {
+                display: inline-block;
+                vertical-align: middle;
+                content: " ";
+                height: 100%;
+            }
+        }
+
+        .modal-dialog {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+        }
+    </style>
+
+{% endblock %}
+
+{% block outcontent %}
+    <div id="modalDiv" style="min-height: 100%; height: 600px; min-width: 100%;">
+        <form action="/accounts/login/" method="POST">
+            <!-- Modal -->
+            <div class="modal fade" id="login_modal" role="dialog">
+                {% csrf_token %}
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Login</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col col-md-3 col-md-offset-1">
+                                    <label> User Name: </label>
+                                </div>
+                                <div class="col col-md-7">
+                                    <input class="form-control" id="username" name="username" value="{{ username }}"/>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <div class="col col-md-3 col-md-offset-1">
+                                    <label> Password: </label>
+                                </div>
+                                <div class="col col-md-7">
+                                    <input class="form-control" id="password" name="password" type="password"/>
+                                </div>
+                            </div>
+
+                            <br/>
+                            <div class="row">
+                                <div class="col col-md-6">
+                                    {% if error_message %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-md-3 col-md-offset-1">
+                                    <button type="submit" class="btn btn-success" onclick="return validateForm();">
+                                        Login
+                                    </button>
+                                </div>
+                            </div>
+                            <br>
+                            <div align="center" style="padding-bottom: 15px">
+                                <label style="color: red;">{{ error_message }}</label>
+                                <label style="color: green;">{{ success_message }}</label>
+
+                                <label> Not a Member? <a href="/accounts/register/">Sign up</a></label>
+                                <br/>
+                                <label> <a href="/">Home</a></label>
+                            </div>
+                        </div>
+                        <input name="redirect_url" value="{{ redirect_url }}" type="hidden"/>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

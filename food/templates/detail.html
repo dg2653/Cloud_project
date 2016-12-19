@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div align="center">
+        <h1>Recipe Details</h1>
+    </div>
+    <h3> Recipes: </h3>
+    {% if recipes %}
+    {% for recipe in recipes %}
+        <ul>
+            <li class="white-label"><h1>{{ recipe.dish_title }}</h1></li>
+           <li class="white-label"><h3>Cooking Time: {{ recipe.cooking_time }}</h3></li>
+           <li class="white-label"><h3>Ingredients: {{ recipe.ingredients }}</h3></li>
+           <li class="white-label"><h3>Directions: {{ recipe.directions }}</h3></li>
+
+            <li class="white-label">
+                {% if recipe.dish_photo %}
+                <img src="{{ recipe.dish_photo.url }}" class="img-responsive">
+            {% else %}
+                    <h3>No image to display</h3>
+            {% endif %}
+            </li>
+        </ul>
+        <br/>
+    {% endfor %}
+      {% else %}
+    <h3> You don't have any recipe</h3>
+    {% endif%}
+
+{% endblock %}
