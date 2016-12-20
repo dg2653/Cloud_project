@@ -11,7 +11,7 @@ import boto3
 db_handler = MongoDbHandler('localhost', 'yelp_dataset')
 # s3.create_bucket(Bucket="app-bucket-dg2653",CreateBucketConfiguration={"LocationConstraint":"us-west-2"})
 
-bucket_name = "app-bucket-jds797"
+bucket_name = "app-bucket-dg2653"
 def index(request):
     context = {'title': 'Home'}
     return render(request, 'index.html', context)
@@ -182,7 +182,7 @@ def profile_page(request):
 def restaurant_info(request):
     restaurant_id = request.GET.get('restaurant_id')
     data, reviews = db_handler.get_restaurant_info(restaurant_id)
-    context = {"title": "Restaurants", "data": data[0], "days": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"], "reviews":reviews}
+    context = {"title": "Restaurants", "data": data[0], "days": ["Monday","Tuesday","Wednesday","Thursday","Friday", "Saturday","Sunday"], "reviews":reviews}
     return render(request, 'restaurant_info.html', context)
 
 

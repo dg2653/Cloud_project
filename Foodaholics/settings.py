@@ -84,9 +84,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'foodaholics',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '127.0.0.1',   # Or an IP Address that your DB is hosted on
+        'USER': 'dg2653',
+        'PASSWORD': 'defg4567',
+        'HOST': 'foodaholics-mysql.caohemu47yzn.us-east-1.rds.amazonaws.com',   # Or an IP Address that your DB is hosted on
         'PORT': '3306',
     }
 }

@@ -1,0 +1,12 @@
+branch-defaults:
+  master:
+    environment: django-env
+global:
+  application_name: Foodaholics
+  branch: null
+  default_ec2_keyname: null
+  default_platform: python2.7
+  default_region: us-west-2
+  profile: null
+  repository: null
+  sc: git
