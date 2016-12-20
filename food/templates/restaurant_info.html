@@ -24,7 +24,9 @@
 {% block content %}
     {% load custom_tags %}
     <div align="center">
+        {% load custom_tags %}
         <h1>{{ data.name }}</h1>
+        <a href="/event?restaurant_id={{ data|get:"_id" }}" class="btn btn-success"> Create Event</a>
         {% if data.coordinates.lat %}
             <div id="map" style="height: 400px; width: 600px">
 

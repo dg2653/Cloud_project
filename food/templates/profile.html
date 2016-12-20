@@ -19,7 +19,6 @@
                         $("#user_pic_holder").html("");
                         $("#user_pic_holder").append("<img src='" + reader.result + "' class=\"img-responsive\" alt=\"\" width=\"100%\" height=\"100%\"/>");
                     }
-
                 });
             }, false);
 
@@ -64,12 +63,12 @@
 
     <div class="row profile">
         <div class="col-md-2">
-            <div class="profile-sidebar" align="center">
+            <div class="profile-sidebar" align="center" style="padding: 10px">
                 <!-- SIDEBAR USERPIC -->
                 {% load static %}
                 {% if profile_pic %}
                     <div class="profile-userpic" id="user_pic_holder">
-                        <img src="application/octet;base64,{{ profile_pic }}" class="img-responsive" alt="" width="100%" height="100%"/>
+                        <img src="{{ profile_pic }}" class="img-responsive" alt="" width="100%" height="100%"/>
                     </div>
                 {% else %}
                     <div class="profile-userpic" id="user_pic_holder">
@@ -92,33 +91,14 @@
                 <br/>
                 <!-- END SIDEBAR USER TITLE -->
                 <!-- SIDEBAR BUTTONS -->
-                <div class="profile-userbuttons">
-                    <button type="button" class="btn btn-success btn-sm">Follow</button>
-                    <button type="button" class="btn btn-danger btn-sm">Message</button>
-                </div>
                 <!-- END SIDEBAR BUTTONS -->
                 <!-- SIDEBAR MENU -->
                 <div class="profile-usermenu">
                     <ul class="nav">
-                        <li class="active">
-                            <a href="#">
-                                <i class="glyphicon glyphicon-home"></i>
-                                Overview </a>
-                        </li>
                         <li>
                             <a href="#">
                                 <i class="glyphicon glyphicon-user"></i>
                                 Account Settings </a>
-                        </li>
-                        <li>
-                            <a href="#" target="_blank">
-                                <i class="glyphicon glyphicon-ok"></i>
-                                Tasks </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i class="glyphicon glyphicon-flag"></i>
-                                Help </a>
                         </li>
                     </ul>
                 </div>
@@ -126,13 +106,62 @@
             </div>
         </div>
         <div class="col-md-7">
-            <div class="profile-sidebar">
-                Hello
+            <h1>Recipes</h1>
+            <div class="profile-sidebar" style="padding: 10px">
+                {#            <div class="">#}
+                <hr/>
+                <br/>
+                {% for recipe in recipes %}
+                    <div class="row">
+                        <div class="col col-md-6">
+                            <label>{{ recipe.dish_title }}</label>
+                        </div>
+                        <div class="col col-md-6 pull-right">
+                            <label>Cooking Time: {{ recipe.cooking_time }}</label>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col col-md-6">
+                            <label>Ingredients:</label><br/>
+                            {{ recipe.ingredients|safe }}
+                        </div>
+                        <div class="col col-md-6">
+                            <label>Cooking Directions:</label><br/>
+                            {{ recipe.directions }}
+                        </div>
+                    </div>
+                    <br/>
+                    <a href="/delete_recipe?recipe_id={{ recipe.food_recipe_id }}"> Delete Recipe </a>
+                    <hr/>
+                {% endfor %}
             </div>
         </div>
         <div class="col-md-2">
-            <div class="profile-content">
-                Some user related content goes here...
+            <h1>Friend Requests</h1>
+            <div class="profile-sidebar" style="padding: 10px">
+                <hr/>
+                <ul>
+                    {% for friend_request in friend_requests %}
+                        <li>
+                            {{ friend_request.user_id1 }}
+                            <a class="btn btn-success" href="/accept_request?user_id={{ friend_request.user_id1 }}">Accept </a>
+                            <a class="btn btn-danger" href="/reject_request?user_id={{ friend_request.user_id1 }}">Reject </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <hr/>
+            <h1>Events</h1>
+            <div class="profile-sidebar" style="padding: 10px">
+                <hr/>
+                <ul>
+                    {% for event in events %}
+                        <li>
+                            {{ event}}
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>

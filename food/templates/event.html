@@ -1,34 +1,37 @@
 {% extends 'base.html' %}
+{% block head %}
+    {% load static %}
+{#    <script src="{% static 'js/datepicker.js' %}"></script>#}
+{#    <link href="{% static 'css/datepicker.css' %}"/>#}
+{#    <script type="text/javascript">#}
+{##}
+{#        $(document).ready(function () {#}
+{##}
+{#            $('#datetimepicker1').datetimepicker();#}
+{#        });#}
+{#    </script>#}
 
+
+{% endblock %}
 {% block content %}
-    <div>0
-        <h2 style="color: whitesmoke">Pick a Place</h2>
-    </div><br/>
-    <form method="POST" action="/restaurants/">
-        {% csrf_token %}
-        <div class="row">
-             <div class="col col-md-3">
-                <input id="restaurants" name="restaurants" class="form-control" placeholder="Restaurants"/>
+    <div class="profile-sidebar" style="padding:10px">
+        {% load custom_tags %}
+        <form method="POST" action="/create_event/">
+            {% csrf_token %}
+            <h1 style="color: black">Event at : {{ data.name }}</h1>
+            <div class='input-group date' id='datetimepicker1'>
+                <input type='text' class="form-control"/>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
             </div>
-            <div class="col col-md-3">
-                <input id="city" name="city" class="form-control" placeholder="City"/>
-            </div>
-            <div class="col col-md-3">
-                <select class="form-control selectpicker" id="categories" name="categories" multiple title="Select Categories">
-                    <option value="chinese"> Chinese </option>
-                    <option value="japanese"> Japanese </option>
-                </select>
-            </div>
-            <div class="col col-md-3">
-                <button class="btn btn-success"><span class="glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;Search </button>
-            </div>
-        </div>
-    </form>
-    <h2 style="color: whitesmoke">Invite a Friend</h2>
-    <form class="navbar-form navbar-left" role="search" method="get" action="#">
-        <div class="form-group">
-            <input type="text" placeholder="Friends" class="form-control" name="q" value="{{ request.GET.q }}">
-        </div>
-    </form>
-    <button type="submit" class="btn btn-success">Submit</button>
+            <h2 style="color: black">Invite Friend(s)</h2>
+            <input type="hidden" name="restaurant_id" value="{{ data|get:"_id" }}"/>
+            {% for friend in friends %}
+                <input type="checkbox" name="{{ friend.user_id2 }}"/> <label>{{ friend.user_id2 }}</label>
+
+            {% endfor %}
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+    </div>
 {% endblock %}

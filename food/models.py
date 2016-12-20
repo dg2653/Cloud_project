@@ -120,17 +120,46 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+class EventUsers(models.Model):
+    user_id = models.CharField(max_length=150, blank=True, null=True)
+    event_id = models.CharField(max_length=150, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'event_users'
+
+
+class Events(models.Model):
+    creator_id = models.CharField(max_length=150, blank=True, null=True)
+    restaurant_id = models.CharField(max_length=150, blank=True, null=True)
+    date_of_event = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'events'
+
+
 class FoodRecipe(models.Model):
-    dish_title = models.CharField(max_length=50)
-    cooking_time = models.CharField(max_length=20)
-    ingredients = models.CharField(max_length=500)
-    directions = models.CharField(max_length=1000)
-    dish_photo = models.FileField(max_length=100)
+    food_recipe_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=150, blank=True, null=True)
+    dish_title = models.CharField(max_length=50, blank=True, null=True)
+    cooking_time = models.CharField(max_length=20, blank=True, null=True)
+    ingredients = models.CharField(max_length=500, blank=True, null=True)
+    directions = models.CharField(max_length=1000, blank=True, null=True)
+    dish_photo = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'food_recipe'
+
+
+class FriendRequests(models.Model):
+    user_id1 = models.CharField(max_length=150, blank=True, null=True)
+    user_id2 = models.CharField(max_length=150, blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'friend_requests'
 
 
 class Friends(models.Model):
@@ -140,3 +169,12 @@ class Friends(models.Model):
     class Meta:
         managed = False
         db_table = 'friends'
+
+
+class UserProfile(models.Model):
+    username = models.CharField(primary_key=True, max_length=150)
+    profile_pic = models.TextField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'user_profile'

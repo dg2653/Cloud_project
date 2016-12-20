@@ -40,10 +40,13 @@ class MongoDbHandler:
         return data
 
 
-    def get_restaurant_info(self, restaurant_id):
+    def get_restaurant_info(self, restaurant_id, only_data = False):
         db, client = self.make_connection()
         results = db.restaurants.find({"_id": ObjectId(restaurant_id)})
         data = list(results)
+        if only_data:
+            client.close()
+            return data[0]
         reviews = list(db.reviews.find({"business_id":data[0]['business_id']}))
         client.close()
         return data, reviews
