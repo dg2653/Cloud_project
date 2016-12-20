@@ -1,6 +1,10 @@
 branch-defaults:
   master:
     environment: django-env
+environment-defaults:
+  django-env:
+    branch: null
+    repository: null
 global:
   application_name: Foodaholics
   branch: null
