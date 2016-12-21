@@ -10,7 +10,7 @@ class MongoDbHandler:
         self.db_name = db_name
 
     def make_connection(self):
-        client = MongoClient(self.connection_url)
+        client = MongoClient(self.connection_url, connect=False)
         db = client[self.db_name]
         return db, client
        
