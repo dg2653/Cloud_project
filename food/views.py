@@ -9,7 +9,7 @@ import json
 import base64
 import boto3
 db_handler = MongoDbHandler('54.159.68.29', 'yelp_dataset')
-access_token, secret_access_token = db_handler.get_aws_credentials()
+#access_token, secret_access_token = db_handler.get_aws_credentials()
 # s3.create_bucket(Bucket="app-bucket-dg2653",CreateBucketConfiguration={"LocationConstraint":"us-west-2"})
 
 bucket_name = "app-bucket-dg2653"
