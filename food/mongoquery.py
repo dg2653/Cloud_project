@@ -15,7 +15,7 @@ class MongoDbHandler:
         return db, client
         
     def get_aws_credentials(self):
-        db, client = self.get_connection()
+        db, client = self.make_connection()
         obj = db.aws_credentials.find_one()
         result = [obj['access_token'], obj['access_token_secret']]
         client.close()
