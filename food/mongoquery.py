@@ -13,14 +13,14 @@ class MongoDbHandler:
         client = MongoClient(self.connection_url, connect=False)
         db = client[self.db_name]
         return db, client
-    
+    '''
     def get_aws_credentials(self):
         db, client = self.make_connection()
         obj = db.aws_credentials.find_one()
         result = [obj['access_token'], obj['access_token_secret']]
         client.close()
         return result
-    
+    '''
     def get_all_restaurants(self):
         db, client = self.make_connection()
         results = db.restaurants.find({"coordinates":{"$exists":True}},{"coordinates":1, "name":1, "_id":1})
