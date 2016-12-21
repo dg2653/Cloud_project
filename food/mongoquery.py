@@ -13,7 +13,7 @@ class MongoDbHandler:
         client = MongoClient(self.connection_url)
         db = client[self.db_name]
         return db, client
-     '''   
+    '''   
     def get_aws_credentials(self):
         db, client = self.make_connection()
         obj = db.aws_credentials.find_one()
