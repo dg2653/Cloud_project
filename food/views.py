@@ -8,7 +8,7 @@ from .mongoquery import MongoDbHandler
 import json
 import base64
 import boto3
-db_handler = MongoDbHandler('54.87.253.220', 'yelp_dataset')
+db_handler = MongoDbHandler('54.159.68.29', 'yelp_dataset')
 # s3.create_bucket(Bucket="app-bucket-dg2653",CreateBucketConfiguration={"LocationConstraint":"us-west-2"})
 
 bucket_name = "app-bucket-dg2653"
