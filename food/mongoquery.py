@@ -51,13 +51,10 @@ class MongoDbHandler:
         db, client = self.make_connection()
         results = db.restaurants.find({"_id": ObjectId(restaurant_id)})
         data = list(results)
-        try:
-            if only_data:
-                client.close()
-                return data[0]
-            reviews = list(db.reviews.find({"business_id":data[0]['business_id']}))
-        except:
-            pass
+        if only_data:
+            client.close()
+            return data[0]
+        reviews = list(db.reviews.find({"business_id":data[0]['business_id']}))
         client.close()
         return data, reviews
 
